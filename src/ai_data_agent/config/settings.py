@@ -20,6 +20,7 @@ class Settings(BaseSettings):
 
     # Database
     database_url: str
+    readonly_database_url: str
 
     # App behavior
     app_env: str = Field(default="development")
