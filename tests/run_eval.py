@@ -3,6 +3,7 @@ import uuid
 
 from ai_data_agent.agents.graph import build_graph
 from ai_data_agent.agents.state import AgentState
+from ai_data_agent.observability.tracing import traced_invoke
 
 with open("tests/fixtures/eval_dataset.json", "r", encoding="utf-8-sig") as f:
     cases = json.load(f)
@@ -12,7 +13,7 @@ app = build_graph()
 results = []
 for case in cases:
     state = AgentState(user_question=case["question"], correlation_id=str(uuid.uuid4()))
-    outcome = app.invoke(state)
+    outcome = traced_invoke(app, state)
 
     route_ok = True
     if case.get("expected_route"):
@@ -44,3 +45,5 @@ for r in results:
 total = len(results)
 passed_count = sum(1 for r in results if r["passed"])
 print(f"\n{passed_count}/{total} passed ({passed_count/total*100:.0f}%)")
+
+
