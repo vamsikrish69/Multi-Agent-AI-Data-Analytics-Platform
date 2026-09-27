@@ -1,4 +1,5 @@
 from functools import lru_cache
+from typing import Optional
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -19,8 +20,16 @@ class Settings(BaseSettings):
     ollama_base_url: str = Field(default="http://localhost:11434")
 
     # Database
+    db_provider: str = Field(default="postgres")
     database_url: str
     readonly_database_url: str
+
+    # Snowflake (only required if db_provider=snowflake)
+    snowflake_account: Optional[str] = None
+    snowflake_user: Optional[str] = None
+    snowflake_password: Optional[str] = None
+    snowflake_warehouse: Optional[str] = None
+    snowflake_database: Optional[str] = None
 
     # App behavior
     app_env: str = Field(default="development")

@@ -16,6 +16,7 @@ dependencies = [
     "structlog==24.4.0",
     "tenacity==9.0.0",
     "sqlglot==25.34.0",
+    "snowflake-connector-python==4.4.0",
 ]
 
 [project.optional-dependencies]
@@ -30,6 +31,7 @@ dev = [
 [build-system]
 requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
