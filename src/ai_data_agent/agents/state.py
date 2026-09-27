@@ -1,7 +1,7 @@
 ﻿from enum import Enum
 from typing import Any, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class RouteType(str, Enum):
@@ -26,6 +26,8 @@ class AgentState(BaseModel):
     Starts mostly empty when a request comes in, and gets progressively
     filled in as it moves through Router -> Specialist -> Judge -> Response.
     """
+
+    model_config = ConfigDict(use_enum_values=True, validate_assignment=True)
 
     # Input
     user_question: str
@@ -56,7 +58,3 @@ class AgentState(BaseModel):
 
     # Final output
     final_answer: Optional[str] = None
-
-    class Config:
-        use_enum_values = True
-        validate_assignment = True
