@@ -28,6 +28,8 @@ Original question: {question}
 SQL query used: {sql}
 Query result (raw data): {result}
 
+IMPORTANT: if the SQL query has a LIMIT clause but returns a small number of rows (like a single COUNT result), the LIMIT is irrelevant and does NOT mean the true count could be higher. A LIMIT only caps how many rows come back - it does not affect the accuracy of an aggregate like COUNT, SUM, or AVG. Do not mention the LIMIT unless the result actually contains as many rows as the limit allows.
+
 Write a short, clear, plain-English answer to the original question, based ONLY on the result data above. Do not invent numbers that are not in the result. If the result is empty, say so clearly."""
 
 
