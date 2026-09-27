@@ -1,4 +1,4 @@
-from enum import Enum
+﻿from enum import Enum
 from typing import Any, Optional
 
 from pydantic import BaseModel, Field
@@ -30,6 +30,7 @@ class AgentState(BaseModel):
     # Input
     user_question: str
     correlation_id: str
+    code_to_review: Optional[str] = None
 
     # Router output
     route: Optional[RouteType] = None
