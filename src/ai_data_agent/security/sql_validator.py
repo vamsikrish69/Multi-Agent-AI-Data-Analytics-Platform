@@ -6,7 +6,7 @@ class SQLValidationError(Exception):
     """Raised when generated SQL fails a security or structural check."""
 
 
-ALLOWED_TABLES = {
+MOBILITY_ALLOWED_TABLES = {
     "customers",
     "drivers",
     "rides",
@@ -15,9 +15,19 @@ ALLOWED_TABLES = {
     "driver_ratings",
 }
 
+MARKETING_ALLOWED_TABLES = {
+    "fct_campaign_measurement",
+    "fct_channel_attribution",
+    "fct_attribution_performance",
+}
 
-def validate_sql(sql: str, max_result_rows: int = 500) -> str:
+
+def validate_sql(sql: str, allowed_tables: set[str], max_result_rows: int = 500) -> str:
     """Validate that `sql` is a single, safe, read-only SELECT statement.
+
+    allowed_tables scopes the check to one domain's approved tables, so
+    a marketing question can never accidentally (or maliciously) reach
+    a mobility table, and vice versa.
 
     Returns the (possibly rewritten) SQL with a LIMIT enforced.
     Raises SQLValidationError if the query is unsafe in any way.
@@ -51,7 +61,7 @@ def validate_sql(sql: str, max_result_rows: int = 500) -> str:
             )
 
     referenced_tables = {t.name.lower() for t in tree.find_all(exp.Table)}
-    unapproved = referenced_tables - ALLOWED_TABLES
+    unapproved = referenced_tables - allowed_tables
     if unapproved:
         raise SQLValidationError(f"Query references unapproved table(s): {unapproved}")
 

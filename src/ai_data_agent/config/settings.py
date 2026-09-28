@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     db_provider: str = Field(default="postgres")
     database_url: str
     readonly_database_url: str
+    marketing_database_url: str = ""
+    marketing_readonly_database_url: str = ""
 
     # Snowflake (only required if db_provider=snowflake)
     snowflake_account: Optional[str] = None
@@ -42,3 +44,4 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     """Return a cached Settings instance, loaded once per process."""
     return Settings()
+

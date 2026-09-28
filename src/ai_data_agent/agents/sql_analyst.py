@@ -1,10 +1,10 @@
-﻿import structlog
+import structlog
 
 from ai_data_agent.agents.state import AgentState
 from ai_data_agent.config.settings import get_settings
 from ai_data_agent.db.postgres_adapter import PostgresAdapter
 from ai_data_agent.llm.provider import get_chat_model
-from ai_data_agent.security.sql_validator import SQLValidationError, validate_sql
+from ai_data_agent.security.sql_validator import MOBILITY_ALLOWED_TABLES, SQLValidationError, validate_sql
 
 logger = structlog.get_logger()
 
@@ -51,7 +51,7 @@ def generate_sql(state: AgentState) -> AgentState:
     state.generated_sql = raw_sql
 
     try:
-        state.validated_sql = validate_sql(raw_sql, max_result_rows=settings.max_result_rows)
+        state.validated_sql = validate_sql(raw_sql, MOBILITY_ALLOWED_TABLES, max_result_rows=settings.max_result_rows)
         state.validation_error = None
     except SQLValidationError as e:
         state.validated_sql = None
@@ -115,3 +115,5 @@ def explain_result(state: AgentState) -> AgentState:
     )
 
     return state
+
+
