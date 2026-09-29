@@ -8,11 +8,12 @@ logger = structlog.get_logger()
 ROUTER_SYSTEM_PROMPT = """You are a routing classifier for a data analytics system.
 
 Classify the user's request into exactly ONE of these categories:
-- sql_analyst: the user is asking a question about data that could be answered with a SQL query (e.g. counts, sums, comparisons, lookups about rides, customers, drivers, payments, ratings, locations)
+- sql_analyst: the user is asking a question about mobility/rides/drivers/customers/payments data (e.g. counts, sums, comparisons, lookups about rides, customers, drivers, payments, ratings, locations)
+- marketing_analyst: the user is asking a question about marketing campaigns, channels, attribution, conversions, revenue, or ROAS
 - etl_analyst: the user wants Python or SQL ETL/pipeline code reviewed for bugs, data quality issues, or transformation logic
 - unsupported: the request is unsafe, asks to modify/delete data, is unrelated to data analysis, or is unclear
 
-Respond with ONLY one word: sql_analyst, etl_analyst, or unsupported. No punctuation, no explanation.
+Respond with ONLY one word: sql_analyst, marketing_analyst, etl_analyst, or unsupported. No punctuation, no explanation.
 """
 
 
@@ -29,7 +30,9 @@ def route_request(state: AgentState) -> AgentState:
 
     raw_decision = str(response.content).strip().lower()
 
-    if "sql_analyst" in raw_decision:
+    if "marketing_analyst" in raw_decision:
+        state.route = RouteType.MARKETING_ANALYST
+    elif "sql_analyst" in raw_decision:
         state.route = RouteType.SQL_ANALYST
     elif "etl_analyst" in raw_decision:
         state.route = RouteType.ETL_ANALYST

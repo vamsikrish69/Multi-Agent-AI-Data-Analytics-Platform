@@ -1,4 +1,4 @@
-﻿from enum import Enum
+from enum import Enum
 from typing import Any, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -8,6 +8,7 @@ class RouteType(str, Enum):
     """Which specialist agent should handle this request."""
 
     SQL_ANALYST = "sql_analyst"
+    MARKETING_ANALYST = "marketing_analyst"
     ETL_ANALYST = "etl_analyst"
     UNSUPPORTED = "unsupported"
 
@@ -58,3 +59,4 @@ class AgentState(BaseModel):
 
     # Final output
     final_answer: Optional[str] = None
+
